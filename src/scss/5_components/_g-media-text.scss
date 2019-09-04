@@ -1,0 +1,26 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700);
+
+
+.wp-block-media-text {
+  font-family: "poppins", Arial, sans-serif;
+  margin: 100px auto;
+  display: block;
+
+  &__content {
+    padding: 0 !important;
+
+    p {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #333333;
+      margin-bottom: 35px;
+    }
+  }
+
+  @media screen and (min-width: 960px) {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    grid-column-gap: 60px;
+  }
+}

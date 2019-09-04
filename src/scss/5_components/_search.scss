@@ -1,0 +1,152 @@
+.header-search {
+  padding-left: 50px;
+  height: 40px;
+  margin-top: 6px;
+  position: relative;
+
+  @include rwdmax(small) {
+    padding: 0 10px;
+    position: static;
+  }
+
+  .search-input {
+    padding-left: 20px;
+    padding-bottom: 10px;
+    font-family: $font-family;
+
+    @include placeholder {
+      color: $input-text !important;
+    }
+  }
+  .search-icon {
+    svg {
+      --stroke-color: #{$text};
+      margin-top: 50%;
+      width: 18px;
+      height: 18px;
+
+      .dark & {
+        --stroke-color: #{$white};
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      svg {
+        --stroke-color: #{$cta};
+      }
+    }
+  }
+
+  .main-search {
+    position: absolute;
+    top: 6px;
+    min-width: 200px;
+    background: $white;
+    z-index: 999;
+
+    .search-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: $white;
+      font-weight: 300;
+      padding-right: 50px;
+
+      &::placeholder {
+        color: initial;
+      }
+
+      .dark & {
+        background-color: $mine-shaft;
+        color: $white;
+
+        &::placeholder {
+          color: $white;
+        }
+      }
+    }
+
+    .search-submit {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      right: 20px;
+      position: absolute;
+      padding: 0;
+      bottom: 12px;
+      -webkit-appearance: none;
+      display: block;
+
+      @include rwdmax(small){
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        margin-top: -6px;
+        right: 40px;
+      }
+    }
+
+    @include rwdmax(small){
+      top: 136px;
+      width: 100% !important;
+      left: 0;
+      display: none;
+    }
+
+
+    @include rwd(mobile) {
+      width: 0;
+      height: 80%;
+      right: 100px;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: all 0.4s ease;
+    }
+
+    .search-input {
+      border-bottom: 1px solid $cta;
+    }
+
+    .search-arrow{
+      width: 20px;
+      height: 12px;
+
+      &:hover{
+       use{
+         --fill-color: #{$cta};
+       }
+      }
+    }
+
+  }
+
+  &.search-open {
+    .main-search {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
+      width: 350px;
+
+      @include rwdmax(small){
+        width: 100%;
+        display: block;
+        padding: 20px;
+        background: $white;
+        box-sizing: border-box;
+      }
+
+    }
+  }
+}
+
+
+.search-arrow-1{
+  --fill-color: #{$text};
+
+  .dark & {
+    --fill-color: #{$white};
+  }
+}

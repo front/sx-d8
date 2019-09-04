@@ -1,0 +1,6 @@
+{% extends "page.html.twig" %}
+{% block header %}{% endblock %}
+
+{% block content %}
+  {{ page.content|without('starterx_page_title') }}
+{% endblock %}

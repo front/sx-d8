@@ -1,0 +1,98 @@
+.tag-cloud-links {
+  margin-bottom: 30px;
+
+  @include rwd(medium) {
+    margin-bottom: 45px;
+  }
+
+  &__title,
+  & .widgettitle {
+    font-style: normal;
+    font-weight: bold;
+    line-height: 30px;
+    font-size: 18px;
+    @include rwd(tablet) {
+      line-height: 27px;
+      font-size: 20px;
+    }
+
+    color: $text;
+    margin-bottom: 35px;
+  }
+
+  &--inside-article {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    @include rwd(medium) {
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+  }
+
+  &--centered {
+    & .tagcloud {
+      display: inline-block;
+      @include rwd(medium) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    & .widgettitle {
+      display: inline-block;
+      @include rwd(medium) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__items {
+    & .tag-cloud-links__title {
+      margin-bottom: 25px;
+    }
+
+    &--centered {
+      display: inline-block;
+      @include rwd(medium) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  &--mobile {
+    @include rwd(medium) {
+      display: none;
+    }
+  }
+
+  .tag-cloud-link {
+    a {
+      color: $text;
+      display: inline-block;
+      text-decoration: none;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 21px;
+      font-size: 13px !important;
+      background: $backgrounds;
+      border-radius: 4px;
+      text-align: center;
+      padding: 10px 15px;
+      margin: 0 10px 8px;
+
+      &:hover {
+        background: $semi-white;
+      }
+
+      &:focus, &.is-active {
+        background: $cta;
+        color: $white;
+      }
+    }
+  }
+}

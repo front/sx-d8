@@ -1,0 +1,12 @@
+/**
+ * Don't edit this file. Find all style at ./sass folder.
+ **/
+.wp-block-starterx-cards-block {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-column-gap: 40px;
+  grid-row-gap: 40px;
+  margin: 0 auto;
+}
+
+/*# sourceMappingURL=style.css.map */

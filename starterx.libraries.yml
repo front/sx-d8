@@ -1,0 +1,20 @@
+global-css:
+  css:
+    theme:
+      build/css/main.css: {preprocess: false}
+
+global-js:
+  js:
+    build/js/main.js: {preprocess: false}
+  dependencies:
+    - core/jquery
+
+color.preview:
+  version: VERSION
+  css:
+    theme:
+      color/preview.css: {}
+  js:
+    color/preview.js: {}
+  dependencies:
+    - color/drupal.color

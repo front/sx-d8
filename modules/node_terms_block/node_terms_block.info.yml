@@ -1,0 +1,5 @@
+name: 'Node terms block'
+type: module
+description: 'Show list existing terms on a given vocabulary'
+core: 8.x
+package: 'Frontkom'

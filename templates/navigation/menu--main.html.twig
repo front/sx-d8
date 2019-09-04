@@ -1,0 +1,115 @@
+{#
+/**
+ * @file
+ * Theme override to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link url, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+
+<div class="header-menu">
+
+{% import _self as menus %}
+
+{#
+  We call a macro which calls itself to render the full tree.
+  @see https://twig.symfony.com/doc/1.x/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0) }}
+
+    {% macro menu_links(items, attributes, menu_level) %}
+    {% import _self as menus %}
+    {% if items %}
+    {% if menu_level == 0 %}
+    <ul {{ attributes }} class="menu-item main-menu-list">
+    {% elseif menu_level == 1 %}
+    <ul {{ attributes }} class="sub-menu js-sub-menu">
+        {% endif %}
+        {% for item in items %}
+            <li{{ item.attributes }} class="menu-item main-menu-list">
+                {% if item.below %}
+                    <a>
+                        <span>{{ item.title }}</span>
+                    </a>
+                {% else %}
+                    <a href="{{ item.url }}">
+                        <span>{{ item.title }}</span>
+                    </a>
+                {% endif %}
+                {% if item.below %}
+                    {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endmacro %}
+    <div class="menu-toggle menu-toggle--only-mobile">
+        <div class="svg-hamburger">
+            <svg viewBox="0 0 800 600">
+                <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200"
+                      id="top"></path>
+                <path d="M300,320 L540,320" id="middle"></path>
+                <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190"
+                      id="bottom"
+                      transform="translate(480, 320) scale(1, -1) translate(-480, -318) "></path>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<nav class="main-nav mobile-menu">
+    <div class="navigation">
+        <div class="container">
+            {% import _self as menu_mobile %}
+            {{ menu_mobile.menu_links_mobile(items, attributes, 0) }}
+            {% macro menu_links_mobile(items, attributes, menu_level) %}
+            {% import _self as menu_mobile %}
+                {% if items %}
+                {% if menu_level == 0 %}
+                    <ul {{ attributes }} class="menu-item">
+                    {% elseif menu_level == 1 %}
+                    <ul {{ attributes }} class="sub-menu js-sub-menu">
+                        {% endif %}
+                        {% for item in items %}
+                            <li {{ item.attributes }} class="menu-item">
+                                {% if menu_level == 0 %}
+                                    <div class="h4 main-item">
+                                        {% if item.below %}
+                                            <a>
+                                                <span>{{ item.title }}</span>
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ item.url }}">
+                                                <span>{{ item.title }}</span>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% elseif menu_level == 1 %}
+                                    <a href="{{ item.url }}">
+                                        <span>{{ item.title }}</span>
+                                    </a>
+                                {% endif %}
+                                {% if item.below %}
+                                    {{ menu_mobile.menu_links_mobile(item.below, attributes, menu_level + 1) }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+            {% endmacro %}
+        </div>
+    </div>
+</nav>

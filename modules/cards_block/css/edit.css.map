@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "edit.css",
+	"sources": [
+		"sass/edit.scss"
+	],
+	"names": [],
+	"mappings": "AAAA,AACE,8BAD4B,GACxB,oBAAoB,GAAG,0BAA0B,CAAC;EACpD,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,oCAAoC;EAC3D,eAAe,EAAE,IAAI;EACrB,YAAY,EAAE,IAAI;CACnB;;AANH,AASI,8BAT0B,CAQ5B,oBAAoB,CAClB,gBAAgB,CAAC;EACf,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,KAAK;CACd"
+}

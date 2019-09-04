@@ -1,0 +1,43 @@
+{% include '@starterx/content/header.html.twig' %}
+
+<div id="content" class="site-content">
+    <div id="primary" class="content-area">
+        <main id="main" class="site-main alignwide container" role="main">
+            {% block breadcrumbs %}
+                {{ page.breadcrumbs }}
+            {% endblock %}
+
+            {% block header %}
+                {% if page.content.starterx_page_title %}
+                    <header class="entry-header alignwide entry-title title title--page {{ article_template == 2 ? 'container--centered text-center' }}">
+                        {{ page.content.starterx_page_title|raw }}
+                    </header><!-- .entry-header -->
+                    <hr class="wp-block-separator is-style-wide alignwide">
+                {% endif %}
+            {% endblock %}
+
+            {% block content %}
+                <div class="content {{ page.sidebar_first or page.sidebar_second and article_template != 2 ? 'content--with-sidebar' }} content--article {{ article_template == 2 ? 'container--centered' }}">
+
+                    {% if page.sidebar_first %}
+                        <aside class="layout-sidebar-first" role="complementary">
+                            {{ page.sidebar_first }}
+                        </aside>
+                    {% endif %}
+
+                    <div class="{{ page.sidebar_second ? 'content__left' }} entry-content">
+                            {{ page.content|without('starterx_page_title') }}
+                    </div>
+
+                    {% if page.sidebar_second and article_template != 2 %}
+                        <aside class="layout-sidebar-second content__right sidebar" role="complementary">
+                            {{ page.sidebar_second }}
+                        </aside>
+                    {% endif %}
+                </div>
+            {% endblock %}
+        </main>
+    </div>
+</div>
+
+{% include '@starterx/content/footer.html.twig' %}

@@ -1,0 +1,81 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+{%
+    set classes = [
+    'block',
+    'share-buttons',
+]
+%}
+
+{%
+    set titleClasses = [
+    'share-buttons__title',
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {% if label %}
+        <div{{ title_attributes.addClass(titleClasses) }}>{{ label }}</div>
+    {% endif %}
+    {{ title_suffix }}
+    <div class="share-buttons__buttons ">
+
+        {% if(content['facebook']) %}
+            <a href="https://www.facebook.com/sharer/sharer.php?u=#url" target="_blank" rel="nofollow noopener" class="share-button ab-item">
+                <span class="share-button__icon">
+                    <svg class="icon" width="18" height="18" id="fb" ><title>fb</title>
+                        <path d="M15.575 0H2.425A2.425 2.425 0 0 0 0 2.425v13.15A2.425 2.425 0 0 0 2.425 18H8.91l.012-6.432H7.25a.394.394 0 0 1-.394-.393L6.848 9.1c0-.218.176-.395.394-.395h1.669V6.702c0-2.324 1.42-3.59 3.494-3.59h1.702c.217 0 .394.176.394.394v1.748a.394.394 0 0 1-.394.394l-1.045.001c-1.128 0-1.346.536-1.346 1.323v1.734h2.478c.236 0 .42.206.392.44l-.246 2.074a.394.394 0 0 1-.392.348h-2.221L11.716 18h3.859A2.426 2.426 0 0 0 18 15.575V2.425A2.425 2.425 0 0 0 15.575 0z" fill="var(--fill-color)" stroke="var(--stroke-color)"></path>
+                    </svg>
+                </span>
+                <span class="share-button__name">Facebook</span>
+            </a>
+        {% endif %}
+
+        {% if(content['twitter']) %}
+        <a href="https://twitter.com/share?text={{ pageTitle }}&amp;url={{ uri }}" target="_blank" rel="nofollow noopener"
+           class="share-button ab-item">
+                <span class="share-button__icon">
+                    <svg class="icon" width="18" height="18" id="twitter"><title>twitter</title>
+                        <path d="M17.714 2.03c-.4.19-.815.34-1.241.448A4.182 4.182 0 0 0 17.494.739c.057-.19-.136-.354-.297-.252a6.912 6.912 0 0 1-1.897.837.485.485 0 0 1-.45-.12 3.74 3.74 0 0 0-3.798-.832c-1.258.417-2.23 1.526-2.534 2.895a4.72 4.72 0 0 0-.092 1.527.155.155 0 0 1-.035.116.14.14 0 0 1-.12.051C5.515 4.688 3.03 3.27 1.275.968a.196.196 0 0 0-.332.028A4.366 4.366 0 0 0 .418 3.08a4.29 4.29 0 0 0 1.157 2.956A3.348 3.348 0 0 1 .69 5.67c-.134-.08-.3.022-.301.187-.02 1.67.896 3.156 2.266 3.825h-.083c-.217 0-.437-.021-.653-.066-.152-.03-.279.123-.232.28.445 1.484 1.641 2.578 3.072 2.826a6.84 6.84 0 0 1-4.01 1.302h-.45a.301.301 0 0 0-.29.24c-.034.14.03.289.148.362a10.132 10.132 0 0 0 5.352 1.542c1.645 0 3.183-.349 4.573-1.037a10.18 10.18 0 0 0 3.347-2.68 11.936 11.936 0 0 0 2.049-3.667c.456-1.3.696-2.689.696-4.014v-.063c0-.213.09-.413.248-.55a8.031 8.031 0 0 0 1.543-1.809c.113-.18-.065-.407-.251-.319z" fill="var(--fill-color)" stroke="var(--stroke-color)"></path>
+                    </svg>
+                </span>
+            <span class="share-button__name">Twitter</span>
+        </a>
+        {% endif %}
+
+        {% if(content['linkedIn']) %}
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ uri }}" target="_blank" rel="nofollow noopener"
+               class="share-button ab-item">
+                <span class="share-button__icon">
+{#                  <svg class="icon" width="18" height="16"><use xlink:href="build/spritemap.svg#twitter"></use></svg>#}
+                </span>
+                <span class="share-button__name">LinkedIn</span>
+            </a>
+        {% endif %}
+    </div>
+</div>

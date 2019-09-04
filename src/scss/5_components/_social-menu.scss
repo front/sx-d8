@@ -1,0 +1,12 @@
+.social-menu {
+  padding-left: 15px;
+  @include rwd(medium) {
+    margin-right: 30px;
+  }
+  &__item {
+    margin-left: 17px;
+  }
+  .social-network-name {
+    display: none;
+  }
+}

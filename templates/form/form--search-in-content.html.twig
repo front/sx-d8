@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+
+<div class="search-field container--centered">
+  <form class="search-field__form" action="/search/node" method="get" id="search-block-form" accept-charset="UTF-8" data-drupal-form-fields="edit-keys">
+    <div class="input-submit">
+      <label class="styled-input" for="styled-input__search">
+        <input id="styled-input__search" class="styled-input__field" data-drupal-selector="edit-keys" type="text" name="keys" value="" size="15" maxlength="128" tabindex="-1" placeholder=" ">
+        <span class="styled-input__placeholder">Type to search:</span>
+      </label>
+      <button type="submit" class="button">
+        <svg class="icon search-arrow" width="20" height="12">
+          <use xlink:href="{{ base_url_for_files }}/build/spritemap.svg#search-arrow"></use>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>

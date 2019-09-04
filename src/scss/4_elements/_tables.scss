@@ -1,0 +1,41 @@
+/*
+table
+th
+tr
+ */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 60px 0;
+  font-size: 16px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  overflow: hidden;
+
+  thead tr {
+    font-size: 18px;
+  }
+
+  tfoot tr {
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+td, th {
+  padding: 30px;
+}
+
+th {
+  border-bottom: 1px solid $backgrounds;
+  background: $cta;
+  color: $white;
+  font-weight: 400;
+  text-align: left;
+}
+
+td {
+  color: $text;
+  border-bottom: 1px solid $semi-white;
+}

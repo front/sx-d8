@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains social_media_sharing.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function social_media_sharing_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the social_media_sharing module.
+    case 'help.page.social_media_sharing':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Social media sharing block') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function social_media_sharing_theme() {
+  return [
+    'social_media_sharing' => [
+      'variables' => [
+        'label' => NULL,
+        'content' => NULL,
+        'uri' => NULL,
+        'pageTitle' => NULL,
+      ],
+    ],
+  ];
+}

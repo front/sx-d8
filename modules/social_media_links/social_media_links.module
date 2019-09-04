@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Contains social_media_links.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function social_media_links_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the social_media_links module.
+    case 'help.page.social_media_links':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Configurable block with list of custom social links') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function social_media_links_theme($existing, $type, $theme, $path) {
+  return [
+    'social-media-links-block' => [
+      'variables' => [
+        'title' => t('Share'),
+        'content' => NULL,
+      ],
+    ],
+  ];
+}

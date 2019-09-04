@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i');
+
+.wp-block-quote {
+  display: flex;
+  flex-direction: column;
+  margin: 2em 0;
+
+  p {
+    font-family: 'Lora', serif;
+    font-weight: normal;
+    font-style: italic;
+    line-height: 34px;
+    font-size: 20px;
+    padding-left: 55px;
+    padding-right: 55px;
+    color: $headings;
+    margin-bottom: 0;
+    position: relative;
+
+    @include rwdmax(tablet) {
+      font-size: 18px;
+    }
+
+    &:before {
+      content: '';
+      width: 32px;
+      height: 30px;
+      position: absolute;
+      left: 0;
+      top: -2px;
+      @include sprite('apostrophes', (
+           color: '#{$cta}'
+      ));
+    }
+  }
+
+  cite {
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    font-size: 16px;
+    color: $input-text;
+    padding-left: 75px;
+    padding-right: 55px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    position: relative;
+
+    &:after {
+      content: '—';
+      position: absolute;
+      left: 55px;
+    }
+  }
+}
+
+
+.wp-block-quote-light, .wp-block-quote-black {
+  display: flex;
+  flex-direction: column;
+  margin: 2em 0;
+  border: 1px solid #cce0ee;
+  background: #f4f8f9;
+  border-radius: 6px;
+  padding: 50px 67px;
+
+  @include rwdmax(tablet) {
+    padding: 25px;
+  }
+
+  p {
+    font-family: 'Lora', serif;
+    font-weight: bold;
+    line-height: (32/24);
+    font-size: 24px;
+    padding-left: 50px;
+    color: $headings;
+    margin-bottom: 0;
+    margin-top: 0;
+    position: relative;
+
+    &:before {
+      content: '';
+      width: 32px;
+      height: 30px;
+      position: absolute;
+      left: 0;
+      top: -2px;
+      @include sprite('apostrophes', (
+           color: '#25A9E0'
+      ));
+    }
+
+    @include rwdmax(tablet){
+      font-size: 18px;
+    }
+  }
+
+  cite {
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px;
+    font-size: 16px;
+    color: $input-text;
+    padding-left: 75px;
+    margin-bottom: 5px;
+    margin-top: 25px;
+    position: relative;
+
+    &:after {
+      content: '—';
+      position: absolute;
+      left: 55px;
+    }
+  }
+}
+
+.wp-block-quote-black{
+  background: $headings;
+
+  p, cite{
+    color: $white;
+    font-family: $font-family;
+  }
+
+  p{
+    &:before{
+      @include sprite('apostrophes', (
+         color: '#{$cta}'
+      ));
+    }
+  }
+}

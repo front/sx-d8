@@ -1,0 +1,5 @@
+name: 'Search page'
+type: module
+description: 'Custom module changing search page'
+core: 8.x
+package: 'Frontkom'

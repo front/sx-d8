@@ -1,0 +1,19 @@
+.arrow {
+
+  use{
+    --fill-color: #{$semi-white};
+  }
+
+  &--right {
+    transform: rotate(-180deg);
+    & + .line {
+      margin-left: 2px;
+    }
+  }
+}
+
+.line {
+  & + .arrow--left {
+    margin-left: 2px;
+  }
+}

@@ -1,0 +1,26 @@
+{% extends "page.html.twig" %}
+{% block header %}{% endblock %}
+
+{% if not image_404_url %}
+  {% set image_404_url = "/" ~ directory ~ "/src/img/404.jpg" %}
+{% endif %}
+
+{% block content %}
+      <section class="error-404 not-found">
+        <div class="error-404__item error-404__img-wrapper">
+          <img class="error-404__img" src="{{ image_404_url }}" alt="404 image">
+        </div>
+        <h1 class="error-404__item error-404__title">
+          404
+        </h1>
+        <div class="error-404__item error-404__subtitle">
+          {{'Page not found'|t}}
+        </div>
+        <div class="error-404__item">
+          <a class="error-404__button btn btn--rounded" href="{{ url('<front>') }}">
+            {{'Go to homepage'|t}}
+          </a>
+        </div>
+      </section><!-- .error-404 -->
+{% endblock %}
+

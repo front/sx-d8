@@ -1,0 +1,18 @@
+.wp-block-table{
+  table{
+    @extend table;
+  }
+
+  th, td {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    min-width: 200px;
+  }
+  th{
+    @extend th;
+  }
+  td{
+    @extend td;
+  }
+}

@@ -1,0 +1,20 @@
+name: StarterX
+type: theme
+description: Frontkoms starter theme
+core: 8.x
+libraries:
+  - starterx/global-css
+  - starterx/global-js
+  - starterx/color
+regions:
+  top_menu: 'Top menu'
+  header: Header
+  highlighted: Highlighted
+  breadcrumbs: Breadcrumbs
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  footer_first: 'Footer first'
+  footer_second: 'Footer second'
+  footer_third: 'Footer third'
+  footer_fourth: 'Footer fourth'

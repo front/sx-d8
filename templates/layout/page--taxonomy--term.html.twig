@@ -1,0 +1,39 @@
+{% extends "page.html.twig" %}
+
+{% set contentClasses = [
+  'content',
+  hasSidebar ? 'content--with-sidebar' :'content--full-view',
+] %}
+
+{% set entryContentClasses = [
+  'entry-content',
+  hasSidebar ? 'content--with-sidebar',
+  page.sidebar_second ? 'content__left'
+] %}
+
+      {% block header %}
+        <header class="entry-header alignwide entry-title title title--page">
+          {{ page.content.starterx_page_title|raw }}
+        </header><!-- .entry-header -->
+      {% endblock %}
+
+      {% block content %}
+        <div class="{{ contentClasses|join(' ') }}">
+
+          {% if page.sidebar_first %}
+            <aside class="layout-sidebar-first" role="complementary">
+              {{ page.sidebar_first }}
+            </aside>
+          {% endif %}
+
+          <div class="{{ entryContentClasses|join(' ') }}">
+            {{ page.content|without('starterx_page_title') }}
+          </div>
+
+          {% if page.sidebar_second and hasSidebar%}
+            <aside class="layout-sidebar-second content__right sidebar" role="complementary">
+              {{ page.sidebar_second }}
+            </aside>
+          {% endif %}
+        </div>
+      {% endblock %}

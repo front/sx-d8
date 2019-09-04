@@ -1,0 +1,249 @@
+<?php
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param $suggestions
+ * @param $variables
+ * @param $hook
+ */
+function starterx_theme_suggestions_page_alter(&$suggestions, $variables, $hook) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  switch ($route_name) {
+    case 'system.401':
+      // Unauthorized Access.
+      $error = 401;
+      break;
+    case 'system.403':
+      // Access Denied.
+      $error = 403;
+      break;
+    case 'system.404':
+      // Page Not Found.
+      $error = 404;
+      break;
+  }
+  if (isset($error)) {
+    // $suggestions[] = 'page__' . $error;
+    $suggestions[] = 'page__404'; // @todo each page for each error
+  }
+}
+
+function starterx_preprocess(&$variables) {
+  $variables['base_url'] = $GLOBALS['base_url'];
+  $variables['base_url_for_files'] = $GLOBALS['base_url'] . '/' . $variables['directory'];
+}
+
+/**
+ * Implements hook_preprocess_links__language_block().
+ *
+ * @param $variables
+ */
+function starterx_preprocess_links__language_block(&$variables) {
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $lang = preg_replace('/-.*$/', '', $lang);
+  $variables['lang'] = $lang;
+}
+
+function starterx_form_system_theme_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface &$form_state, $form_id = NULL)
+{
+  // Work-around for a core bug affecting admin themes. See issue #943212.
+  if (isset($form_id)) {
+    return;
+  }
+
+  $form['header_settings'] = array(
+    '#type' => 'details',
+    '#title' => t('Header settings'),
+    '#description' => t('Select a header color type'),
+    '#open' => TRUE,
+  );
+
+  $header_template_types = array(
+    1 => 'white',
+    2 => 'black'
+  );
+
+  $form['header_settings']['header_template'] = array(
+    '#type' => 'select',
+    '#title' => t('Header Template'),
+    '#description' => t("Choose type of the header color"),
+    '#default_value' => theme_get_setting('header_template'),
+    '#options' => $header_template_types,
+  );
+
+  $form['footer_settings'] = array(
+    '#type' => 'details',
+    '#title' => t('Footer settings'),
+    '#description' => t('Select a footer color type'),
+    '#open' => TRUE,
+  );
+
+  $footer_template_types = array(
+    1 => 'black',
+    2 => 'white'
+  );
+
+  $form['footer_settings']['footer_template'] = array(
+    '#type' => 'select',
+    '#title' => t('Footer Template'),
+    '#description' => t("Choose type of the footer color"),
+    '#default_value' => theme_get_setting('footer_template'),
+    '#options' => $footer_template_types,
+  );
+
+  $form['template_settings'] = array(
+    '#type' => 'details',
+    '#title' => t('Template settings'),
+    '#description' => t('Select a template settings'),
+    '#open' => TRUE,
+  );
+
+  $article_template_types = array(
+    1 => 'align to left',
+    2 => 'centered'
+  );
+
+  $form['template_settings']['article_template'] = array(
+    '#type' => 'select',
+    '#title' => t('Article Template'),
+    '#description' => t("Choose type of the article template"),
+    '#default_value' => theme_get_setting('article_template'),
+    '#options' => $article_template_types,
+  );
+
+  $article_archive_template_types = array(
+    1 => 'without sidebar',
+    2 => 'with right sidebar'
+  );
+
+  $form['template_settings']['article_archive_template'] = array(
+    '#type' => 'select',
+    '#title' => t('Article Archive Template'),
+    '#description' => t("Choose type of the article archive template"),
+    '#default_value' => theme_get_setting('article_archive_template'),
+    '#options' => $article_archive_template_types,
+  );
+
+  // add 404 image settings
+
+  $form['404_settings'] = array(
+    '#type' => 'details',
+    '#title' => t('404 settings'),
+    '#open' => TRUE,
+  );
+
+  $form['404_settings']['image_404'] = array(
+    '#title' => t('404 image'),
+    '#description' => t('Override default 404 image'),
+    '#type' => 'managed_file',
+    '#upload_location' => 'public://404-image/',
+    '#upload_validators' => array(
+      'file_validate_extensions' => array('gif png jpg jpeg'),
+    ),
+    '#default_value' => theme_get_setting('image_404'),
+  );
+}
+
+/**
+ * Implements hook_preprocess_page()
+ *
+ * @param $variables
+ */
+function starterx_preprocess_page(&$variables)
+{
+  if (isset($variables['node'])) {
+    switch ($variables['node']->getType()) {
+      case "article":
+        $variables['article_template'] = theme_get_setting('article_template');
+        break;
+    }
+  }
+
+  if (!is_null($exception = Drupal::requestStack()->getCurrentRequest()->attributes->get('exception'))) {
+    $status_code = $exception->getStatusCode();
+    if ($status_code == 404) {
+      $image_404 = theme_get_setting('image_404');
+      if ( isset($image_404) ) {
+        $fid = $image_404[0];
+      }
+      if( isset($fid) ) {
+        $file = \Drupal\file\Entity\File::load($fid);
+        if( isset($file) ) {
+          $variables['image_404_url'] = file_create_url($file->getFileUri());
+        }
+      }
+    }
+  }
+
+  $variables['hasSidebar'] = theme_get_setting('article_archive_template') == 2;
+
+  $variables['header_template'] = theme_get_setting('header_template');
+  if ( isset($variables['header_template']) && $variables['header_template'] == 2) {
+    $variables['header_template'] = 'dark';
+  }
+  $variables['footer_template'] = theme_get_setting('footer_template');
+  if ( isset($variables['footer_template']) && $variables['footer_template'] == 2) {
+    $variables['footer_template'] = 'light';
+  }
+}
+
+function starterx_preprocess_item_list__search_results(&$variables) {
+
+  $total = null;
+  // get the total number of results from the $GLOBALS
+  if(isset($GLOBALS['pager_total_items'])){
+    $total = $GLOBALS['pager_total_items'][0];
+  }
+
+  $variables['keys'] = $_GET['keys'];
+  $variables['count_items'] = $total;
+}
+
+function starterx_theme_suggestions_form_alter(&$suggestions, $variables) {
+  if ($variables['element']['#form_id'] == 'search_form') {
+    $suggestions[] = 'form__search_in_content';
+  }
+}
+
+/**
+ * Override or insert variables into the page template.
+ */
+function starterx_process_page(&$variables) {
+  // Hook into color.module.
+  if (module_exists('color')) {
+    _color_page_alter($variables);
+  }
+}
+
+/**
+ * Override or insert variables into the page template for HTML output.
+ */
+function starterx_process_html(&$variables) {
+  // Hook into color.module.
+  if (module_exists('color')) {
+    _color_html_alter($variables);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ * Implements hook_preprocess_breadcrumb().
+ *
+ * @param $variables
+ */
+function starterx_preprocess_breadcrumb(&$variables) {
+  $request = \Drupal::request();
+  $route_match = \Drupal::routeMatch();
+  $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+
+  $variables['#cache']['contexts'][] = 'url';
+  if (!empty($page_title)) {
+    if ($page_title == 'Search') {
+      unset($variables['breadcrumb']['1']);
+    }
+    $variables['breadcrumb'][] = [
+      'text' => $page_title,
+    ];
+  }
+}
