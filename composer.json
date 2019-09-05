@@ -1,6 +1,6 @@
 {
-    "name": "starterxd/theme",
+    "name": "drupal/starterx",
     "description": "Starter Theme for Drupal made by Frontkom",
-    "type": "library",
+    "type": "drupal-theme",
     "require": {}
 }
