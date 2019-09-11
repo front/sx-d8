@@ -1,0 +1,19 @@
+uuid: dad2c6db-55a9-4ec0-b4b9-aae054ca7b9c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_related_articles_fr_module
+field_name: field_related_articles_fr_module
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
