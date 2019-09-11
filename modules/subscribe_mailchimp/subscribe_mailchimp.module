@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Contains subscribe_mailchimp.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function subscribe_mailchimp_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the subscribe_mailchimp module.
+    case 'help.page.subscribe_mailchimp':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Subscribe to mailchimp newsletter form') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function subscribe_mailchimp_theme() {
+  return [
+    'subscribe_mailchimp' => [
+      'variables' => [
+        'webHookHash' => NULL,
+        'content' => NULL,
+      ],
+    ],
+    'mailchimp_signup_subscribe_block_newsletter_form' => [
+      'render element' => 'form',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if($form_id === 'mailchimp_signup_subscribe_block_newsletter_form') {
+    foreach (array_keys($form['mailchimp_lists']) as $key) {
+      if (strpos($key, 'mailchimp_') !== false) {
+        $id = str_replace('mailchimp_', '', $key);
+
+        $form['mailchimp_lists']['#elements'][$id] = [
+          '#id' => $id,
+          '#title' => $form['mailchimp_lists'][$key]['subscribe']['#title'],
+        ];
+      }
+    }
+  }
+}

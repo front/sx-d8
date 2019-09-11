@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+{% set formClasses = [
+  'newsletter__form',
+] %}
+
+<form{{ attributes.addClass(formClasses) }}>
+
+  {{ form.form_build_id }}
+  {{ form.form_token }}
+  {{ form.form_id }}
+
+  <div class="newsletter__inputs">
+
+    {% if form.mergevars.FNAME %}
+      <div class="newsletter__input">
+        <input data-drupal-selector="edit-mergevars-fname" type="text"
+               id="{{ form.mergevars.FNAME['#id'] }}"
+               name="{{ form.mergevars.FNAME['#name'] }}"
+               placeholder="{{ form.mergevars.FNAME['#title'] }}">
+      </div>
+    {% endif %}
+
+    {% if form.mergevars.LNAME %}
+      <div class="newsletter__input">
+        <input data-drupal-selector="edit-mergevars-fname" type="text"
+               id="{{ form.mergevars.LNAME['#id'] }}"
+               name="{{ form.mergevars.LNAME['#name'] }}"
+               placeholder="{{ form.mergevars.LNAME['#title'] }}">
+      </div>
+    {% endif %}
+
+    {% if form.mergevars.EMAIL %}
+      <div class="newsletter__input">
+        <input data-drupal-selector="edit-mergevars-email" type="email"
+               id="{{ form.mergevars.EMAIL['#id'] }}"
+               name="{{ form.mergevars.EMAIL['#name'] }}"
+               placeholder="{{ form.mergevars.EMAIL['#title'] }}"
+               required="required" aria-required="true">
+      </div>
+    {% endif %}
+
+    <div class="newsletter__input">
+      <button type="submit"
+              class="btn btn--bigger btn--wide btn--big-font">{{ form.actions.submit['#value'] }}</button>
+    </div>
+  </div>
+
+  {% if(form.mailchimp_lists['#elements']) %}
+    <div class="newsletter__additional">
+      <div class="newsletter__additional-question">{{ 'Velg ditt abonnement'|t }}:</div>
+
+      {% for list in form.mailchimp_lists['#elements'] %}
+        <div class="newsletter__radio input-radio">
+          <label class="input-radio__label">
+            <input type="radio" value="{{ list['#id'] }}"
+                   name="mailchimp_lists[mailchimp_{{ list['#id'] }}][subscribe]" {{ loop.first ? 'checked' : '' }}>
+            <span class="input-radio__icon"></span>
+            <span class="input-radio__desc">{{ list['#title'] }}</span>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</form>

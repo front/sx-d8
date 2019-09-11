@@ -1,0 +1,10 @@
+name: 'Subscribe mailchimp'
+type: module
+description: 'Subscribe to mailchimp newsletter form'
+core: 8.x
+package: 'Frontkom'
+dependencies:
+  - mailchimp
+  - mailchimp_signup
+  - mailchimp_lists
+  - mailchimp_campaign
