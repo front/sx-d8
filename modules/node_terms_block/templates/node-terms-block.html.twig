@@ -50,8 +50,8 @@
   <div class="tag-cloud-links__items">
         {% for term in content %}
           <div class="tag-cloud-link">
-            <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid}) }}">
-              {{ term.name }}
+            <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid.value}) }}">
+              {{ term.name.value }}
             </a>
           </div>
         {% endfor %}
