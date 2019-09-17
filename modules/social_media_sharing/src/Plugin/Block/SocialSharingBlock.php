@@ -3,15 +3,12 @@
 namespace Drupal\social_media_sharing\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Controller\TitleResolverInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Block\Annotation\Block;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\social_media_sharing\UseCase\MetaTagAdapterInterface;
 
 /**
  * Provides a 'SocialSharingBlock' block.
@@ -23,22 +20,11 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
  */
 class SocialSharingBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * @var Request
-   */
-  private $request;
+  private $metaTagAdapter;
 
-  private $requestStack;
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MetaTagAdapterInterface $metaTagAdapter) {
 
-  private $titleResolver;
-
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $requestStack, TitleResolverInterface $titleResolver) {
-
-    $this->requestStack = $requestStack;
-
-    $this->request = $requestStack->getCurrentRequest();
-
-    $this->titleResolver = $titleResolver;
+    $this->metaTagAdapter = $metaTagAdapter;
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -48,7 +34,7 @@ class SocialSharingBlock extends BlockBase implements ContainerFactoryPluginInte
    */
   public function defaultConfiguration() {
     return [
-    ] + parent::defaultConfiguration();
+      ] + parent::defaultConfiguration();
   }
 
   /**
@@ -60,8 +46,7 @@ class SocialSharingBlock extends BlockBase implements ContainerFactoryPluginInte
       '#multiple' => TRUE,
       '#title' => $this->t('Social networks'),
       '#default_value' => $this->configuration['social_networks'],
-      '#weight' => '0',
-      '#required' => true,
+      '#required' => TRUE,
       '#options' => [
         'facebook' => 'Facebook',
         'twitter' => 'Twitter',
@@ -84,32 +69,31 @@ class SocialSharingBlock extends BlockBase implements ContainerFactoryPluginInte
    */
   public function build() {
 
-    $route = $this->request->attributes->get(RouteObjectInterface::ROUTE_OBJECT);
-
-    $build = [];
-    $build['#theme'] = 'social_media_sharing';
-    $build['#content'] = $this->configuration['social_networks'];
-    $build['#label'] = $this->configuration['label'];
-    $build['#uri'] = $this->request->getUri();
-    $build['#pageTitle'] = $this->titleResolver->getTitle($this->request, $route);
-
-    return $build;
+    return [
+      '#theme' => 'social_media_sharing',
+      '#content' => $this->configuration['social_networks'],
+      '#label' => $this->configuration['label'],
+      '#uri' => $this->metaTagAdapter->getSafeTagValue('canonical_url'),
+      '#pageTitle' => $this->metaTagAdapter->getSafeTagValue('title'),
+      '#pageDescription' => $this->metaTagAdapter->getSafeTagValue('description'),
+    ];
   }
 
-    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
-    {
-        /* @var RequestStack $requestStack */
-        $requestStack = $container->get('request_stack');
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
 
-        /* @var TitleResolverInterface $titleResolver */
-        $titleResolver = $container->get('title_resolver');
+    /* @var MetaTagAdapterInterface $clientMetaTagService */
+    $clientMetaTagService = $container->get('social_media_sharing:clint_meta_tag_service');
 
-        return new static(
-            $configuration,
-            $plugin_id,
-            $plugin_definition,
-            $requestStack,
-            $titleResolver
-        );
-    }
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $clientMetaTagService
+    );
+  }
+
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }

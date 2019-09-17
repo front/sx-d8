@@ -1,0 +1,9 @@
+services:
+  social_media_sharing:clint_meta_tag_service:
+    class: Drupal\social_media_sharing\UseCase\ClientMetaTagService
+    arguments: [
+      '@metatag.manager',
+      '@metatag.token',
+      '@request_stack',
+      '@title_resolver'
+    ]
