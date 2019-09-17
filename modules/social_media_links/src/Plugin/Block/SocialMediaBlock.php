@@ -99,7 +99,7 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
         '#suffix' => '</div>',
         'icon' => [
           '#type' => 'select',
-          '#title' => $this->t('Icon selection @num', ['@num' => $queueNumber]),
+          '#title' => $this->t('Icon'),
           '#options' => $this->getIconOptions(),
           '#default_value' => isset($this->configuration['instances'][$x]['icon']) ?
             $this->configuration['instances'][$x]['icon'] : null,
@@ -107,7 +107,7 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
         ],
         'text_label_field' => [
           '#type' => 'textfield',
-          '#title' => $this->t('Text label @num', ['@num' => $queueNumber]),
+          '#title' => $this->t('Label'),
           '#default_value' => isset($this->configuration['instances'][$x]['text_label_field']) ?
             $this->configuration['instances'][$x]['text_label_field'] : null,
           '#maxlength' => 64,
@@ -116,7 +116,7 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
         ],
         'link_field' => [
           '#type' => 'url',
-          '#title' => $this->t('Text url @num', ['@num' => $queueNumber]),
+          '#title' => $this->t('Url'),
           '#default_value' => isset($this->configuration['instances'][$x]['link_field']) ?
             $this->configuration['instances'][$x]['link_field'] : null,
           '#required' => true,
