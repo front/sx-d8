@@ -132,4 +132,8 @@ class NodeTermsBlock extends BlockBase implements ContainerFactoryPluginInterfac
     return $options;
   }
 
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
 }
