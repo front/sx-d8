@@ -33,12 +33,16 @@
 {% if articles %}
   <div class="related-articles__items">
     {% for article in articles %}
-      <a href="{{ path('entity.node.canonical', {'node': article.nid.value}) }}" class="related-articles__item">
-        <img src="{{ file_url(article.field_image.entity.uri.value) }}" alt="{{ article.field_image.alt }}">
-        <div class="related-articles__item__title text-center">
-          {{ article.title.value }}
-        </div>
-      </a>
+      <div class="related-articles__item">
+        <a href="{{ path('entity.node.canonical', {'node': article.nid.value}) }}" class="related-articles__item">
+          {% if(article.field_image.entity.uri.value) %}
+            <img src="{{ file_url(article.field_image.entity.uri.value) }}" alt="{{ article.field_image.alt }}">
+          {% endif %}
+          <div class="related-articles__item__title text-center">
+            {{ article.title.value }}
+          </div>
+        </a>
+      </div>
     {% endfor %}
   </div>
 {% endif %}
