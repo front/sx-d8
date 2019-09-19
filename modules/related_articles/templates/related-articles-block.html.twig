@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Theme override to display a block.
+ * Default theme implementation to display a block.
  *
  * Available variables:
  * - plugin_id: The ID of the block implementation.
@@ -17,45 +17,32 @@
  *   - id: A valid HTML ID and guaranteed unique.
  * - title_attributes: Same as attributes, except applied to the main title
  *   tag that appears in the template.
+ * - content_attributes: Same as attributes, except applied to the main content
+ *   tag that appears in the template.
  * - title_prefix: Additional output populated by modules, intended to be
  *   displayed in front of the main title tag that appears in the template.
  * - title_suffix: Additional output populated by modules, intended to be
  *   displayed after the main title tag that appears in the template.
+ * - editors: Array with User entity classes
  *
  * @see template_preprocess_block()
+ *
+ * @ingroup themeable
  */
 #}
-{%
-  set classes = [
-  'block',
-  'block-node-terms-block',
-  'tag-cloud-links'
-]
-%}
-
-{%
-  set titleClasses = [
-  'tag-cloud-links__title',
-]
-%}
-
-<div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
-    <div{{ title_attributes.addClass(titleClasses) }}>{{ label }}</div>
-  {% endif %}
-  {{ title_suffix }}
-  {% block content %}
-    {% if content %}
-  <div class="tag-cloud-links__items">
-        {% for term in content %}
-          <div class="tag-cloud-link">
-            <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': term.tid.value}) }}">
-              {{ term.name.value }}
-            </a>
+{% if articles %}
+  <div class="related-articles__items">
+    {% for article in articles %}
+      <div class="related-articles__item">
+        <a href="{{ path('entity.node.canonical', {'node': article.nid.value}) }}" class="related-articles__item">
+          {% if(article.field_image.entity.uri.value) %}
+            <img src="{{ file_url(article.field_image.entity.uri.value) }}" alt="{{ article.field_image.alt }}">
+          {% endif %}
+          <div class="related-articles__item__title text-center">
+            {{ article.title.value }}
           </div>
-        {% endfor %}
+        </a>
+      </div>
+    {% endfor %}
   </div>
-    {% endif %}
-  {% endblock %}
-</div>
+{% endif %}

@@ -8,8 +8,11 @@ use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Vocabulary;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\taxonomy\Entity\Term;
 
 /**
  * Provides a 'NodeTermsBlock' block.
@@ -23,9 +26,19 @@ class NodeTermsBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
   private $entityTypeManager;
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entityTypeManager) {
+  private $requestStack;
+
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entityTypeManager,
+    RequestStack $requestStack
+  ) {
 
     $this->entityTypeManager = $entityTypeManager;
+
+    $this->requestStack = $requestStack;
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -35,11 +48,15 @@ class NodeTermsBlock extends BlockBase implements ContainerFactoryPluginInterfac
     /* @var EntityTypeManagerInterface $entityTypeManager */
     $entityTypeManager = $container->get('entity_type.manager');
 
+    /* @var RequestStack $requestStack */
+    $requestStack = $container->get('request_stack');
+
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $entityTypeManager
+      $entityTypeManager,
+      $requestStack
     );
   }
 
@@ -64,11 +81,34 @@ class NodeTermsBlock extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function build() {
 
-    $terms = $this->entityTypeManager
-      ->getStorage('taxonomy_term')
-      ->loadTree($this->configuration['taxonomy_vocabulary']);
-
     $build = [];
+
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $this->requestStack->getCurrentRequest()->get('node');
+
+    if(!($node instanceof Node)) {
+      return $build;
+    }
+
+    $referencedEntities = $node->referencedEntities();
+
+    $terms = [];
+
+    /* @var $reference Term */
+    foreach ($referencedEntities as $reference) {
+      if($reference instanceof Term) {
+        foreach ($reference->get('vid')->getValue() as $referenceValue) {
+          if($referenceValue['target_id'] === $this->configuration['taxonomy_vocabulary']) {
+            $terms[] = $reference;
+          }
+        }
+      }
+    }
+
+    if(empty($terms)) {
+      return $build;
+    }
+
     $build['#theme'] = 'node_terms_block';
     $build['#content'] = $terms;
     $build['#label'] = $this->configuration['label'];
@@ -90,6 +130,10 @@ class NodeTermsBlock extends BlockBase implements ContainerFactoryPluginInterfac
     }
 
     return $options;
+  }
+
+  public function getCacheMaxAge() {
+    return 0;
   }
 
 }

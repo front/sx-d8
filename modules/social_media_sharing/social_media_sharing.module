@@ -34,6 +34,7 @@ function social_media_sharing_theme() {
         'content' => NULL,
         'uri' => NULL,
         'pageTitle' => NULL,
+        'pageDescription' => NULL,
       ],
     ],
   ];

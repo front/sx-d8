@@ -3,3 +3,5 @@ type: module
 description: 'Social media sharing block'
 core: 8.x
 package: 'Frontkom'
+dependencies:
+  - metatag
