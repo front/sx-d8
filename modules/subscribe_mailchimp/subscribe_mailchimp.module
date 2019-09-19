@@ -45,7 +45,8 @@ function subscribe_mailchimp_theme() {
  * Implements hook_form_alter().
  */
 function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if($form_id === 'mailchimp_signup_subscribe_block_newsletter_form') {
+
+  if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== false) {
     foreach (array_keys($form['mailchimp_lists']) as $key) {
       if (strpos($key, 'mailchimp_') !== false) {
         $id = str_replace('mailchimp_', '', $key);
@@ -56,5 +57,12 @@ function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, 
         ];
       }
     }
+
+    foreach ($form['mergevars'] as $key => $mergevar) {
+      if(isset($mergevar['#type']) && in_array($mergevar['#type'], ['textfield', 'email'])) {
+        $form['#mailchimp_text_inputs'][$key] = $mergevar;
+      }
+    }
   }
+
 }
