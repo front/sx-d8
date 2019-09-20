@@ -14,8 +14,6 @@
   'newsletter__form',
 ] %}
 
-{{ dump(form.mergevars) }}
-
 <section class="wp-block-newsletter">
   <div class="container">
     <div class="newsletter row">
@@ -28,48 +26,17 @@
         {% if(form['#mailchimp_text_inputs']) %}
         <div class="newsletter__inputs">
 
-          {% for key, textInput in form['#mailchimp_text_inputs'] %}
-
-            {{ dump(form.mergevars[key]['#name']) }}
-
+          {% for key, input in form['#mailchimp_text_inputs'] %}
             <div class="newsletter__input">
               <input
-                type="{{ form.mergevars[key]['#type'] === 'textfield' }}"
+                type="{{ input['#type'] }}"
                      id="{{ form.mergevars[key]['#id'] }}"
                      name="{{ form.mergevars[key]['#name'] }}"
                      placeholder="{{ form.mergevars[key]['#title'] }}"
-{#                      {{ textInput['#required'] ? required="required" : '' }}#}
+                     {{ input['#required'] ? 'required="required"' : '' }}
               >
             </div>
           {% endfor %}
-
-          {% if form.mergevars.FNAME %}
-            <div class="newsletter__input">
-              <input data-drupal-selector="edit-mergevars-fname" type="text"
-                     id="{{ form.mergevars.FNAME['#id'] }}"
-                     name="{{ form.mergevars.FNAME['#name'] }}"
-                     placeholder="{{ form.mergevars.FNAME['#title'] }}">
-            </div>
-          {% endif %}
-
-          {% if form.mergevars.LNAME %}
-            <div class="newsletter__input">
-              <input data-drupal-selector="edit-mergevars-fname" type="text"
-                     id="{{ form.mergevars.LNAME['#id'] }}"
-                     name="{{ form.mergevars.LNAME['#name'] }}"
-                     placeholder="{{ form.mergevars.LNAME['#title'] }}">
-            </div>
-          {% endif %}
-
-          {% if form.mergevars.EMAIL %}
-            <div class="newsletter__input">
-              <input data-drupal-selector="edit-mergevars-email" type="email"
-                     id="{{ form.mergevars.EMAIL['#id'] }}"
-                     name="{{ form.mergevars.EMAIL['#name'] }}"
-                     placeholder="{{ form.mergevars.EMAIL['#title'] }}"
-                     required="required" aria-required="true">
-            </div>
-          {% endif %}
 
           <div class="newsletter__input">
             <button type="submit"
@@ -78,17 +45,17 @@
         </div>
         {% endif %}
 
-        {% if(form.mailchimp_lists['#elements']) %}
+        {% if(form['#mailchimp_checkbox_inputs']) %}
           <div class="newsletter__additional">
             <div class="newsletter__additional-question">{{ 'Velg ditt abonnement'|t }}:</div>
-
-            {% for list in form.mailchimp_lists['#elements'] %}
+            {% for key, list in form['#mailchimp_checkbox_inputs'] %}
               <div class="newsletter__radio input-radio">
                 <label class="input-radio__label">
-                  <input type="radio" value="{{ list['#id'] }}"
-                         name="mailchimp_lists[mailchimp_{{ list['#id'] }}][subscribe]" {{ loop.first ? 'checked' : '' }}>
-                  <span class="input-radio__icon"></span>
-                  <span class="input-radio__desc">{{ list['#title'] }}</span>
+                  <input type="{{ form.mailchimp_lists[key]['subscribe']['#type'] }}"
+                         value="{{ form.mailchimp_lists[key]['subscribe']['#return_value'] }}"
+                         id="{{ form.mailchimp_lists[key]['subscribe']['#id'] }}"
+                         name="{{ form.mailchimp_lists[key]['subscribe']['#name'] }}" {{ loop.first ? 'checked' : '' }}>
+                  <span class="input-radio__desc">{{ form.mailchimp_lists[key]['subscribe']['#title'] }}</span>
                 </label>
               </div>
             {% endfor %}

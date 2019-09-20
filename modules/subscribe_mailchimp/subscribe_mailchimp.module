@@ -47,20 +47,25 @@ function subscribe_mailchimp_theme() {
 function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
   if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== false) {
+
+    //prepare Mailchimp Audiences
     foreach (array_keys($form['mailchimp_lists']) as $key) {
       if (strpos($key, 'mailchimp_') !== false) {
-        $id = str_replace('mailchimp_', '', $key);
-
-        $form['mailchimp_lists']['#elements'][$id] = [
-          '#id' => $id,
-          '#title' => $form['mailchimp_lists'][$key]['subscribe']['#title'],
+        $form['#mailchimp_checkbox_inputs'][$key] = [
+          '#key' => $key
         ];
       }
     }
 
+    //prepare text inputs
     foreach ($form['mergevars'] as $key => $mergevar) {
       if(isset($mergevar['#type']) && in_array($mergevar['#type'], ['textfield', 'email'])) {
-        $form['#mailchimp_text_inputs'][$key] = $mergevar;
+
+        $form['#mailchimp_text_inputs'][$key] = [
+          '#type' => ($mergevar['#type'] == 'textfield') ? 'text' : $mergevar['#type'],
+          '#key' => $key,
+          '#required' => $mergevar['#required'],
+        ];
       }
     }
   }
