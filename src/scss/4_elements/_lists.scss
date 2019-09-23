@@ -13,7 +13,7 @@ li {
 
 
 .content-area{
-  ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion) {
+  ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion):not(.contextual-links) {
     list-style: none;
 
     li {

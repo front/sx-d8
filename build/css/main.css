@@ -630,13 +630,13 @@ ul {
 li {
   line-height: 49px; }
 
-.content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion) {
+.content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion):not(.contextual-links) {
   list-style: none; }
-  .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion) li {
+  .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion):not(.contextual-links) li {
     position: relative;
     line-height: 1.5;
     margin-bottom: 18px; }
-    .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion) li:before {
+    .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion):not(.contextual-links) li:before {
       content: '';
       position: absolute;
       width: 6px;
@@ -645,7 +645,7 @@ li {
       background: #E93350;
       top: 10px;
       left: -21px; }
-    .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion) li:last-child {
+    .content-area ul:not(.pagination):not(.wp-block-gallery):not(.breadcrumbs):not(.accordion):not(.contextual-links) li:last-child {
       margin-bottom: 0; }
 
 /*
