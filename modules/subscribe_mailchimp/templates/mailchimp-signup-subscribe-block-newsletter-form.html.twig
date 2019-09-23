@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+{% set formClasses = [
+  'newsletter__form',
+] %}
+
+<section class="wp-block-newsletter">
+  <div class="container">
+    <div class="newsletter row">
+      <form{{ attributes.addClass(formClasses) }}>
+
+        {{ form.form_build_id }}
+        {{ form.form_token }}
+        {{ form.form_id }}
+
+        {% if(form['#mailchimp_text_inputs']) %}
+        <div class="newsletter__inputs">
+
+          {% for key, input in form['#mailchimp_text_inputs'] %}
+            <div class="newsletter__input">
+              <input
+                type="{{ input['#type'] }}"
+                     id="{{ form.mergevars[key]['#id'] }}"
+                     name="{{ form.mergevars[key]['#name'] }}"
+                     placeholder="{{ form.mergevars[key]['#title'] }}"
+                     {{ input['#required'] ? 'required="required"' : '' }}
+              >
+            </div>
+          {% endfor %}
+
+          <div class="newsletter__input">
+            <button type="submit"
+                    class="btn btn--bigger btn--wide btn--big-font">{{ form.actions.submit['#value'] }}</button>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if(form['#mailchimp_checkbox_inputs']) %}
+          <div class="newsletter__additional">
+            <div class="newsletter__additional-question">{{ 'Velg ditt abonnement'|t }}:</div>
+            {% for key, list in form['#mailchimp_checkbox_inputs'] %}
+              <div class="newsletter__radio input-radio">
+                <label class="input-radio__label">
+                  <input type="{{ form.mailchimp_lists[key]['subscribe']['#type'] }}"
+                         value="{{ form.mailchimp_lists[key]['subscribe']['#return_value'] }}"
+                         id="{{ form.mailchimp_lists[key]['subscribe']['#id'] }}"
+                         name="{{ form.mailchimp_lists[key]['subscribe']['#name'] }}" {{ loop.first ? 'checked' : '' }}>
+                  <span class="input-radio__desc">{{ form.mailchimp_lists[key]['subscribe']['#title'] }}</span>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</section>
+

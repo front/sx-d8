@@ -1,0 +1,16 @@
+{
+    "name": "subscribe_mailchimp",
+    "type": "drupal-module",
+    "description": "Subscribe to mailchimp newsletter form",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/subscribe_mailchimp",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/subscribe_mailchimp",
+        "source": "http://cgit.drupalcode.org/subscribe_mailchimp"
+    },
+    "require": {
+        "drupal/mailchimp": "^1.10"
+    }
+}
