@@ -82,7 +82,7 @@ class SocialSharingBlock extends BlockBase implements ContainerFactoryPluginInte
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
 
     /* @var MetaTagAdapterInterface $clientMetaTagService */
-    $clientMetaTagService = $container->get('social_media_sharing:clint_meta_tag_service');
+    $clientMetaTagService = $container->get('social_media_sharing:client_meta_tag_service');
 
     return new static(
       $configuration,

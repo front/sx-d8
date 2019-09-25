@@ -5,9 +5,9 @@ namespace Drupal\social_media_sharing\UseCase;
 use Drupal\Core\Controller\TitleResolverInterface;
 use Drupal\metatag\MetatagManager;
 use Drupal\metatag\MetatagToken;
+use Drupal\node\Entity\Node;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Drupal\node\Entity\Node;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**

@@ -5,8 +5,8 @@
  * Contains subscribe_mailchimp.module.
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
@@ -32,10 +32,10 @@ function subscribe_mailchimp_theme() {
     'subscribe_mailchimp' => [
       'variables' => [
         'webHookHash' => NULL,
-        'content' => NULL,
+        'content'     => NULL,
       ],
     ],
-    'mailchimp_signup_subscribe_block_newsletter_form' => [
+    'subscribe_mailchimp_block' => [
       'render element' => 'form',
     ],
   ];
@@ -45,29 +45,31 @@ function subscribe_mailchimp_theme() {
  * Implements hook_form_alter().
  */
 function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-  if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== false) {
-
-    //prepare Mailchimp Audiences
+  if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== FALSE) {
+    // Prepare Mailchimp Audiences.
     foreach (array_keys($form['mailchimp_lists']) as $key) {
-      if (strpos($key, 'mailchimp_') !== false) {
+      if (strpos($key, 'mailchimp_') !== FALSE) {
         $form['#mailchimp_checkbox_inputs'][$key] = [
-          '#key' => $key
+          '#key' => $key,
         ];
       }
     }
 
-    //prepare text inputs
+    // Prepare text inputs.
     foreach ($form['mergevars'] as $key => $mergevar) {
-      if(isset($mergevar['#type']) && in_array($mergevar['#type'], ['textfield', 'email'])) {
+      if (isset($mergevar['#type']) && in_array($mergevar['#type'], [
+          'textfield',
+          'email',
+        ])) {
 
         $form['#mailchimp_text_inputs'][$key] = [
-          '#type' => ($mergevar['#type'] == 'textfield') ? 'text' : $mergevar['#type'],
-          '#key' => $key,
+          '#type'     => ($mergevar['#type'] == 'textfield') ? 'text' : $mergevar['#type'],
+          '#key'      => $key,
           '#required' => $mergevar['#required'],
         ];
       }
     }
-  }
 
+    $form['#theme'] = ['subscribe_mailchimp_block'];
+  }
 }
