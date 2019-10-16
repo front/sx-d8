@@ -210,7 +210,8 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
       $this->sortByOrderNumber($instances);
 
       foreach ($instances as $key => $instanceItem) {
-        $instances[$key]['image'] = sprintf("/img/header/menu/%s.svg", $instanceItem['icon']);
+        $image_src = drupal_get_path('module', 'social_media_links') . '/img/header/menu/%s.svg';
+        $instances[$key]['image'] = sprintf($image_src, $instanceItem['icon']);
       }
 
       $this->setConfigurationValue('instances', $instances);

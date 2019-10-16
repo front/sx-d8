@@ -179,7 +179,7 @@ function starterx_preprocess_page(&$variables) {
     $status_code = $exception->getStatusCode();
     if ($status_code == 404) {
       $image_404 = theme_get_setting('image_404');
-      if (isset($image_404)) {
+      if (isset($image_404[0])) {
         $fid = $image_404[0];
       }
       if (isset($fid)) {
