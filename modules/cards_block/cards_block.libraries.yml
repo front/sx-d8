@@ -12,7 +12,7 @@ block-edit:
       css/edit.css: { }
   dependencies:
     - gutenberg/edit-node
-    - drupal/core
+    - core/drupal
     - cards_block/block-card
 block-view:
   version: VERSION
