@@ -2604,7 +2604,8 @@ img.mfp-img {
   .wp-block-newsletter .newsletter__title {
     margin-top: 0;
     padding-top: 0;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    color: #FFFFFF; }
   .wp-block-newsletter .newsletter__desc p, .wp-block-newsletter .newsletter__desc .edit-post-layout__content th, .edit-post-layout__content .wp-block-newsletter .newsletter__desc th, .wp-block-newsletter .newsletter__desc .edit-post-layout__content td, .edit-post-layout__content .wp-block-newsletter .newsletter__desc td, .wp-block-newsletter .newsletter__desc .edit-post-layout__content li, .edit-post-layout__content .wp-block-newsletter .newsletter__desc li, .wp-block-newsletter .newsletter__desc .edit-post-layout__content .wp-block-button__link, .edit-post-layout__content .wp-block-newsletter .newsletter__desc .wp-block-button__link {
     font-weight: 500;
     font-size: 14px;

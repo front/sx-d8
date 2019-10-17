@@ -40,4 +40,11 @@
     </div>
 </div>
 
+{% if page.bottom %}
+  <div role="complementary">
+    {{ page.bottom }}
+  </div>
+{% endif %}
+
+
 {% include '@starterx/content/footer.html.twig' %}
