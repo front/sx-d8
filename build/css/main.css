@@ -2601,16 +2601,24 @@ img.mfp-img {
 .wp-block-newsletter {
   background: #2C3238;
   color: #FFFFFF; }
+  .wp-block-newsletter .newsletter__text {
+    color: inherit;
+    font-family: "poppins", "Arial", sans-seref; }
   .wp-block-newsletter .newsletter__title {
     margin-top: 0;
     padding-top: 0;
     margin-bottom: 10px;
-    color: #FFFFFF; }
+    color: inherit;
+    font-family: inherit;
+    font-size: 32px;
+    line-height: 1.35714; }
   .wp-block-newsletter .newsletter__desc p, .wp-block-newsletter .newsletter__desc .edit-post-layout__content th, .edit-post-layout__content .wp-block-newsletter .newsletter__desc th, .wp-block-newsletter .newsletter__desc .edit-post-layout__content td, .edit-post-layout__content .wp-block-newsletter .newsletter__desc td, .wp-block-newsletter .newsletter__desc .edit-post-layout__content li, .edit-post-layout__content .wp-block-newsletter .newsletter__desc li, .wp-block-newsletter .newsletter__desc .edit-post-layout__content .wp-block-button__link, .edit-post-layout__content .wp-block-newsletter .newsletter__desc .wp-block-button__link {
     font-weight: 500;
     font-size: 14px;
     line-height: 1.35714;
-    margin: 0 !important; }
+    margin: 0 !important;
+    color: inherit;
+    font-family: inherit; }
   .wp-block-newsletter .newsletter__inputs {
     display: grid;
     grid-template-columns: 1fr;
@@ -2621,6 +2629,8 @@ img.mfp-img {
         grid-template-columns: 1fr 1fr auto; } }
   .wp-block-newsletter .newsletter__input {
     width: 100%; }
+    .wp-block-newsletter .newsletter__input button[type=submit] {
+      min-width: 200px; }
   .wp-block-newsletter .newsletter__additional {
     display: grid;
     grid-template-columns: 1fr;
