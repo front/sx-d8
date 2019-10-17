@@ -57,7 +57,7 @@
             {% for key, list in form['#mailchimp_checkbox_inputs'] %}
               <div class="newsletter__radio input-radio">
                 <label class="input-radio__label">
-                  <input type="{{ form.mailchimp_lists[key]['subscribe']['#type'] }}"
+                  <input type="radio"
                          value="{{ form.mailchimp_lists[key]['subscribe']['#return_value'] }}"
                          id="input-radio"
                          name="{{ form.mailchimp_lists[key]['subscribe']['#name'] }}" {{ loop.first ? 'checked' : '' }}>
