@@ -51,32 +51,6 @@
           </div>
         {% endif %}
 
-
-        <div class="newsletter__additional">
-          <div class="newsletter__additional-question">{{ 'Velg ditt abonnement'|t }}:</div>
-          <div class="newsletter__radio input-radio">
-
-            <label class="input-radio__label">
-              <input type="radio"
-                     value="{{ form.mailchimp_lists[key]['subscribe']['#return_value'] }}"
-                     id="{{ form.mailchimp_lists[key]['subscribe']['#id'] }}"
-                     name="name">
-              <span class="input-radio__icon"></span>
-              <span class="input-radio__desc">Norwegian newsletter</span>
-            </label>
-          </div>
-          <div class="newsletter__radio input-radio">
-            <label class="input-radio__label">
-              <input type="radio"
-                     value="{{ form.mailchimp_lists[key]['subscribe']['#return_value'] }}"
-                     id="{{ form.mailchimp_lists[key]['subscribe']['#id'] }}"
-                     name="name">
-              <span class="input-radio__icon"></span>
-              <span class="input-radio__desc">English newsletter</span>
-            </label>
-          </div>
-        </div>
-
         {% if(form['#mailchimp_checkbox_inputs']) %}
           <div class="newsletter__additional">
             <div class="newsletter__additional-question">{{ 'Velg ditt abonnement'|t }}:</div>
