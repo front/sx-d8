@@ -6,10 +6,16 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
+ *
+ * @param $route_name
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ *
+ * @return string
  */
 function subscribe_mailchimp_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
@@ -21,55 +27,101 @@ function subscribe_mailchimp_help($route_name, RouteMatchInterface $route_match)
       return $output;
 
     default:
+      break;
   }
 }
 
 /**
  * Implements hook_theme().
+ *
+ * @return array
  */
 function subscribe_mailchimp_theme() {
   return [
-    'subscribe_mailchimp' => [
-      'variables' => [
-        'webHookHash' => NULL,
-        'content'     => NULL,
-      ],
+    'subscribe_mailchimp__block' => [
+      'render element' => 'elements',
+      'base hook'      => 'block',
     ],
-    'subscribe_mailchimp_block' => [
-      'render element' => 'form',
+    'subscribe_mailchimp__form'  => [
+      'render element' => 'element',
     ],
   ];
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ * @param array $variables
+ */
+function subscribe_mailchimp_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  $elements = $variables['elements'];
+  if (isset($elements['#base_plugin_id'])
+      && $elements['#base_plugin_id'] == 'mailchimp_signup_subscribe_block') {
+    $suggestions[] = 'subscribe_mailchimp__block';
+  }
+}
+
+/**
+ * Prepares variables for Mailchimp subscription form templates.
+ *
+ * @param array $variables
+ */
+function template_preprocess_subscribe_mailchimp__form(array &$variables) {
+  $element = &$variables['element'];
+
+  if (isset($element['mergevars'])) {
+    $element['mergevars']['#prefix'] = '';
+    $element['mergevars']['#suffix'] = '';
+
+    // TODO: retrieve weight from Mailchimp API.
+    $fields_weight = ['FNAME', 'LNAME', 'EMAIL', 'COUNTRY'];
+    foreach ($fields_weight as $key => $value) {
+      if (isset($element['mergevars'][$value])) {
+        $element['mergevars'][$value]['#weight'] = $key;
+      }
+    }
+
+    $fields = Element::children($element['mergevars']);
+    foreach ($fields as $field) {
+      $element['mergevars'][$field]['#prefix'] = '<div class="newsletter__input">';
+      $element['mergevars'][$field]['#suffix'] = '</div>';
+
+      $element['mergevars'][$field]['#theme_wrappers']            = '';
+      $element['mergevars'][$field]['#attributes']['placeholder'] = $element['mergevars'][$field]['#title'];
+      $element['mergevars'][$field]['#label_attributes']['class'] = 'visuallyhidden';
+    }
+  }
+
+  $actions = Element::children($element['actions']);
+  if (!empty($actions)) {
+    foreach ($actions as $action) {
+      $element['actions'][$action]['#prefix'] = '<div class="newsletter__input">';
+      $element['actions'][$action]['#suffix'] = '</div>';
+
+      $element['actions'][$action]['#attributes']['class'] = [
+        'btn',
+        'btn--bigger',
+        'btn--wide',
+        'btn--big-font',
+      ];
+    }
+  }
+
+  template_preprocess_form($variables);
+}
+
+/**
  * Implements hook_form_alter().
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
  */
 function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== FALSE) {
-    // Prepare Mailchimp Audiences.
-    foreach (array_keys($form['mailchimp_lists']) as $key) {
-      if (strpos($key, 'mailchimp_') !== FALSE) {
-        $form['#mailchimp_checkbox_inputs'][$key] = [
-          '#key' => $key,
-        ];
-      }
-    }
 
-    // Prepare text inputs.
-    foreach ($form['mergevars'] as $key => $mergevar) {
-      if (isset($mergevar['#type']) && in_array($mergevar['#type'], [
-          'textfield',
-          'email',
-        ])) {
-
-        $form['#mailchimp_text_inputs'][$key] = [
-          '#type'     => ($mergevar['#type'] == 'textfield') ? 'text' : $mergevar['#type'],
-          '#key'      => $key,
-          '#required' => $mergevar['#required'],
-        ];
-      }
-    }
-
-    $form['#theme'] = ['subscribe_mailchimp_block'];
+    $form['#theme_wrappers'] = '';
+    $form['#theme']          = ['subscribe_mailchimp__form'];
   }
 }

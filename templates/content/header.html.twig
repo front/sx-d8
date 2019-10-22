@@ -1,14 +1,18 @@
 <header class="header {{ header_template }}">
-    <div class="site-navigation">
-        <nav class="header-menu top-menu">
-            <div class="menu">
-                {{ page.top_menu }}
-            </div>
-        </nav>
-        <div class="header-menu main-menu">
-            <div class="menu">
-                {{ page.header }}
-            </div>
+  <div class="site-navigation">
+    {% if page.top_menu %}
+      <nav class="header-menu top-menu">
+        <div class="menu">
+          {{ page.top_menu }}
         </div>
-    </div>
+      </nav>
+    {% endif %}
+    {% if page.header %}
+      <div class="header-menu main-menu">
+        <div class="menu">
+          {{ page.header }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
 </header>

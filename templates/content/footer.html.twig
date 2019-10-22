@@ -1,18 +1,30 @@
-<footer id="colophon" class="site-footer {{ footer_template }}" role="contentinfo">
+{{ page.footer }}
+
+{% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
+  <footer id="colophon" class="site-footer {{ footer_template }}" role="contentinfo">
     <div class="container alignwide">
-        <div class="row columns-4 column-gap-medium">
-            <div>
-                {{ page.footer_first }}
-            </div>
-            <div>
-                {{ page.footer_second }}
-            </div>
-            <div>
-                {{ page.footer_third }}
-            </div>
-            <div>
-                {{ page.footer_fourth }}
-            </div>
-        </div>
+      <div class="row columns-4 column-gap-medium">
+        {% if page.footer_first %}
+          <div>
+            {{ page.footer_first }}
+          </div>
+        {% endif %}
+        {% if page.footer_second %}
+          <div>
+            {{ page.footer_second }}
+          </div>
+        {% endif %}
+        {% if page.footer_third %}
+          <div>
+            {{ page.footer_third }}
+          </div>
+        {% endif %}
+        {% if page.footer_fourth %}
+          <div>
+            {{ page.footer_fourth }}
+          </div>
+        {% endif %}
+      </div>
     </div>
-</footer>
+  </footer>
+{% endif %}

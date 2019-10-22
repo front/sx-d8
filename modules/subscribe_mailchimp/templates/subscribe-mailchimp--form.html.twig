@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme override for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ */
+#}
+
+<form{{ attributes.addClass('newsletter__form') }}>
+  <div class="newsletter__inputs">
+    {{ element|without('mailchimp_lists') }}
+  </div>
+
+  {% if element.mailchimp_lists %}
+    <div class="newsletter__additional">
+      {{ element.mailchimp_lists }}
+    </div>
+  {% endif %}
+</form>
