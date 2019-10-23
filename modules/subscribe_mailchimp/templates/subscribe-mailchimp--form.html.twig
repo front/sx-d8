@@ -16,9 +16,5 @@
     {{ element|without('mailchimp_lists') }}
   </div>
 
-  {% if element.mailchimp_lists %}
-    <div class="newsletter__additional">
-      {{ element.mailchimp_lists }}
-    </div>
-  {% endif %}
+  {{ element.mailchimp_lists }}
 </form>

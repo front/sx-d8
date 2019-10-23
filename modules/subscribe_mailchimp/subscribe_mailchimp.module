@@ -38,12 +38,24 @@ function subscribe_mailchimp_help($route_name, RouteMatchInterface $route_match)
  */
 function subscribe_mailchimp_theme() {
   return [
-    'subscribe_mailchimp__block' => [
+    'subscribe_mailchimp__block'    => [
       'render element' => 'elements',
       'base hook'      => 'block',
     ],
-    'subscribe_mailchimp__form'  => [
+    'subscribe_mailchimp__form'     => [
       'render element' => 'element',
+    ],
+    'subscribe_mailchimp__fieldset' => [
+      'render element' => 'element',
+      'base hook'      => 'fieldset',
+    ],
+    'subscribe_mailchimp__radios'   => [
+      'render element' => 'element',
+      'base hook'      => 'radios',
+    ],
+    'subscribe_mailchimp__form_element__radio' => [
+      'render element' => 'element',
+      'base hook'      => 'form_element',
     ],
   ];
 }
@@ -63,6 +75,57 @@ function subscribe_mailchimp_theme_suggestions_block_alter(array &$suggestions, 
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ * @param array $variables
+ */
+function subscribe_mailchimp_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
+  if (in_array('mailchimp_lists', $variables['element']['#array_parents'])) {
+    $suggestions[] = 'subscribe_mailchimp__fieldset';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ * @param array $variables
+ */
+function subscribe_mailchimp_theme_suggestions_radios_alter(array &$suggestions, array $variables) {
+  if (in_array('mailchimp_lists', $variables['element']['#array_parents'])) {
+    $suggestions[] = 'subscribe_mailchimp__radios';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ * @param array $variables
+ */
+function subscribe_mailchimp_theme_suggestions_form_element_alter(array &$suggestions, array $variables) {
+  if (in_array('mailchimp_lists', $variables['element']['#array_parents'])
+      && $variables['element']['#type'] == 'radio') {
+    $suggestions[] = 'subscribe_mailchimp__form_element__radio';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== FALSE) {
+    $form['#theme_wrappers'] = '';
+    $form['#theme']          = ['subscribe_mailchimp__form'];
+  }
+}
+
+/**
  * Prepares variables for Mailchimp subscription form templates.
  *
  * @param array $variables
@@ -70,7 +133,7 @@ function subscribe_mailchimp_theme_suggestions_block_alter(array &$suggestions, 
 function template_preprocess_subscribe_mailchimp__form(array &$variables) {
   $element = &$variables['element'];
 
-  if (isset($element['mergevars'])) {
+  if (!empty($element['mergevars'])) {
     $element['mergevars']['#prefix'] = '';
     $element['mergevars']['#suffix'] = '';
 
@@ -93,6 +156,18 @@ function template_preprocess_subscribe_mailchimp__form(array &$variables) {
     }
   }
 
+  if (!empty($element['mailchimp_lists'])) {
+    $lists = Element::children($element['mailchimp_lists']);
+
+    foreach ($lists as $list) {
+      $list_children = Element::children($element['mailchimp_lists'][$list]);
+
+      foreach ($list_children as $child) {
+        $form_element = &$element['mailchimp_lists'][$list][$child];
+      }
+    }
+  }
+
   $actions = Element::children($element['actions']);
   if (!empty($actions)) {
     foreach ($actions as $action) {
@@ -112,16 +187,26 @@ function template_preprocess_subscribe_mailchimp__form(array &$variables) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements template_preprocess_fieldset().
  *
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- * @param $form_id
+ * @param array $variables
  */
-function subscribe_mailchimp_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (strpos($form_id, 'mailchimp_signup_subscribe_block') !== FALSE) {
+function subscribe_mailchimp_preprocess_fieldset(array &$variables) {
+  if (in_array('mailchimp_lists', $variables['element']['#array_parents'])) {
+    $variables['attributes']['class'][] = 'newsletter__additional';
+    $variables['legend']['attributes']->addClass('newsletter__additional-question');
+  }
+}
 
-    $form['#theme_wrappers'] = '';
-    $form['#theme']          = ['subscribe_mailchimp__form'];
+/**
+ * Implements template_preprocess_fieldset().
+ *
+ * @param array $variables
+ */
+function subscribe_mailchimp_preprocess_form_element(array &$variables) {
+  if (in_array('mailchimp_lists', $variables['element']['#array_parents'])) {
+    if ($variables['element']['#type'] == 'radio') {
+      $variables['attributes']['class'] = ['newsletter__radio', 'input-radio'];
+    }
   }
 }
