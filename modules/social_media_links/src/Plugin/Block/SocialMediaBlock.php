@@ -20,6 +20,8 @@ use Drupal\Core\Annotation\Translation;
  */
 class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
+  const DEFAULT_COLOR = 'default_color';
+
   /**
    * Symfony\Component\HttpFoundation\RequestStack definition.
    *
@@ -144,6 +146,18 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
       '#value' => $this->t('Delete last link'),
     ];
 
+    $form['iconType'] = [
+      '#type' => 'select',
+      '#options' => [
+        self::DEFAULT_COLOR => $this->t('Default'),
+        'black' => $this->t('Black'),
+      ],
+      '#title' => $this->t('Icon type'),
+      '#default_value' => $this->configuration['iconType'] ?? self::DEFAULT_COLOR,
+      '#required' => true,
+    ];
+
+
     $form['#attached']['library'][] = 'social_media_links/social_media_links';
 
     return $form;
@@ -201,6 +215,7 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
   public function blockSubmit($form, FormStateInterface $form_state) {
 
     $values = $form_state->getValues();
+    $this->setConfigurationValue('iconType', $values['iconType'] ?? self::DEFAULT_COLOR);
 
     if(isset($values['instances'])) {
       $instances = $values['instances'];
@@ -210,8 +225,13 @@ class SocialMediaBlock extends BlockBase implements ContainerFactoryPluginInterf
       $this->sortByOrderNumber($instances);
 
       foreach ($instances as $key => $instanceItem) {
-        $image_src = drupal_get_path('module', 'social_media_links') . '/img/header/menu/%s.svg';
-        $instances[$key]['image'] = sprintf($image_src, $instanceItem['icon']);
+        if($this->configuration['iconType'] === self::DEFAULT_COLOR) {
+          $image_src = drupal_get_path('module', 'social_media_links') . '/img/header/menu/%s.svg';
+          $instances[$key]['image'] = sprintf($image_src, $instanceItem['icon']);
+        } else {
+          $image_src = drupal_get_path('module', 'social_media_links') . '/img/header/menu/%s/%s.svg';
+          $instances[$key]['image'] = sprintf($image_src, $this->configuration['iconType'], $instanceItem['icon']);
+        }
       }
 
       $this->setConfigurationValue('instances', $instances);
